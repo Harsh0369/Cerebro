@@ -31,7 +31,7 @@ export const joinGroup = async (req, res) => {
             return res.status(400).json({ message: "User is already a member of the group" });
         }
         await Membership.create({ user: userId, group: groupId, role: 'member' });
-        res.status(200).json({ message: "Successfully joined the group" });
+         res.status(200).json({ message: "Successfully joined the group" });
     }
     catch (err) {
         res.status(500).json({ message: err.message });
@@ -72,5 +72,30 @@ export const removeUser = async (req, res) => {
     }
     catch (err) {
         res.status(500).json({ message: err.message });
+    }
+}
+
+export const getAllGroups =async(req,res)=>{
+    try {
+        const groups =await Group.find().select("-password");
+        
+
+        return res.status(200).json({message:"Groups found successfully",success:true})
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const getGroupById =async(req,res)=>{
+    try {
+        const groupId =req.params.id;
+
+        const group =await Group.findById(groupId).select("-password");
+
+        if(!group){
+            return res.status(404).json({message:"Group not found",success:false})
+        }
+        return res.status(200).json({message:"Group found successfully",success:false})
+    } catch (error) {
+        console.log(error)
     }
 }
