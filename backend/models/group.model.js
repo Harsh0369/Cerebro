@@ -1,9 +1,13 @@
 import mongoose from 'mongoose';
-import crypto from "crypto"
+const generateNumericId = customAlphabet("1234567890", 6);
 
 const groupSchema = new mongoose.Schema({
     privateId:{
         type:String , 
+         default: function () {
+            if (this.grouptype === "private") return generateNumericId();
+            return null;
+        },
     } , 
     name: {
         type: String,
