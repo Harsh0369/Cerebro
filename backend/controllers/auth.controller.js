@@ -35,3 +35,13 @@ export const login = async (req, res) => {
     }
 }
 
+export const logout =async(req,res)=>{
+    try {
+        res.clearCookies("token",
+        {httpOnly:true})
+
+         return res.status(200).json({message:"User logout successfully"})   
+    } catch (error) {
+        return res.status(500).json({message:error.message})
+    }
+}
