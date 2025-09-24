@@ -1,6 +1,8 @@
 import express from 'express';
 import { User } from '../models/user.model.js';
 
+
+// register login logout deleteaccount resetPassword getUserProfile 
 export const getUser = async (req, res) => {
     try {
         const userId = req.params.id;

@@ -1,7 +1,7 @@
 import express from "express"
 import { User } from "../models/user.model.js"
 
-
+// login logout  register 
 export const register = async (req, res) => {
     try {
         const {name,username,email,password,subjects,availability,avatar} = req.body;
