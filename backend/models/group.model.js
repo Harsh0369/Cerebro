@@ -5,8 +5,7 @@ const groupSchema = new mongoose.Schema({
     privateId:{
         type:String , 
          default: function () {
-            if (this.grouptype === "private") return generateNumericId();
-            return null;
+          return generateNumericId();
         },
     } , 
     name: {
