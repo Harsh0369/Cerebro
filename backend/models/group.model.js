@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { customAlphabet } from 'nanoid';
 const generateNumericId = customAlphabet("1234567890", 6);
 
 const groupSchema = new mongoose.Schema({
@@ -36,6 +37,5 @@ const groupSchema = new mongoose.Schema({
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 }, { timestamps: true });
 
-const Group = mongoose.model('Group', groupSchema);
+export const Group = mongoose.model('Group', groupSchema);
 
-export default Group;
