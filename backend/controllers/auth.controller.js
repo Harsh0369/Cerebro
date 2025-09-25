@@ -5,10 +5,9 @@ import { User } from "../models/user.model.js"
 export const register = async (req, res) => {
     try {
         const {name,username,email,password,subjects,availability,avatar} = req.body;
-        const user = new User({name,username,email,password,subjects,availability,avatar});
-        await user.save();
+        const user = (await User.create({name,username,email,password,subjects,availability,avatar})).isSelected("-password");
         const token = user.generateToken();
-        res.status(201).json({ message: "User registered successfully", token });
+        res.status(201).json({ message: "User registered successfully",user, token });
     }
     catch (err)
     {
@@ -28,7 +27,7 @@ export const login = async (req, res) => {
             return res.status(401).json({ message: "Invalid credentials" });
         }
         const token = user.generateToken();
-        res.status(200).json({ message: "Login successful", token });
+        res.status(200).json({ message: "Login successful", user, token });
     }
     catch (err) {
         res.status(500).json({ message: err.message });
@@ -45,3 +44,12 @@ export const logout =async(req,res)=>{
         return res.status(500).json({message:error.message})
     }
 }
+
+export const getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).select("-password");
+    res.json({ user });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

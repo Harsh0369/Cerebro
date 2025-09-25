@@ -26,3 +26,29 @@ export const getAllUsers = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 }
+
+
+
+export const updateProfile = async (req, res) => {
+  try {
+    const updates = req.body;
+    const user = await User.findByIdAndUpdate(req.userId, updates, {
+      new: true,
+      runValidators: true,
+    }).select("-password");
+    res.json({ user });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const uploadAvatar = async (req, res) => {
+  if (!req.file) return res.status(400).json({ message: "No file" });
+  const avatarUrl = `/uploads/${req.file.filename}`; // or cloud storage
+  const user = await User.findByIdAndUpdate(
+    req.userId,
+    { avatar: avatarUrl },
+    { new: true }
+  ).select("-password");
+  res.json({ avatar: user.avatar });
+};
