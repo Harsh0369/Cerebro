@@ -3,17 +3,38 @@ import { User } from "../models/user.model.js"
 
 // login logout  register 
 export const register = async (req, res) => {
-    try {
-        const {name,username,email,password,subjects,availability,avatar} = req.body;
-        const user = (await User.create({name,username,email,password,subjects,availability,avatar})).isSelected("-password");
-        const token = user.generateToken();
-        res.status(201).json({ message: "User registered successfully",user, token });
-    }
-    catch (err)
-    {
-        res.status(500).json({ message: err.message })
-    }
-}
+  try {
+    const { name, username, email, password, subjects, availability, avatar } =
+      req.body;
+
+    // Create user
+    const user = await User.create({
+      name,
+      username,
+      email,
+      password,
+      subjects,
+      availability,
+      avatar,
+    });
+
+    // Remove password before sending response
+    const userObj = user.toObject();
+    delete userObj.password;
+
+    // Generate token using method defined on schema
+    const token = user.generateToken();
+
+    res.status(201).json({
+      message: "User registered successfully",
+      user: userObj,
+      token,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 
 export const login = async (req, res) => {
     try {
