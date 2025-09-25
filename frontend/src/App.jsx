@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import Navbar from "./Components/Layout/Navbar";
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
@@ -7,13 +8,11 @@ import Dashboard from "./pages/Dashboard";
 import Groups from "./pages/Groups";
 import Profile from "./pages/Profile";
 import GroupRoom from "./pages/GroupRoom";
-import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile } from "./features/auth/authSlice";
 
 function PrivateRoute({ children }) {
   const token = useSelector((s) => s.auth.token);
-  if (!token) return <Navigate to="/login" />;
-  return children;
+  return token ? children : <Navigate to="/login" />;
 }
 
 export default function App() {
@@ -25,8 +24,11 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      {/* Navbar */}
       <Navbar />
-      <div className="min-h-[calc(100vh-64px)] bg-slate-50 p-4">
+
+      {/* Main Content */}
+      <div className="min-h-screen bg-slate-900 text-gray-100 pt-24 px-4 md:px-8">
         <Routes>
           <Route path="/" element={<Navigate to="/dashboard" />} />
           <Route path="/login" element={<Login />} />
