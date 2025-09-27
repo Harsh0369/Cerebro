@@ -6,6 +6,6 @@ const membershipSchema = new mongoose.Schema({
     role: { type: String, enum: ["member", "admin"], default: "member" }
 }, { timestamps: true });
 
-const Membership = mongoose.model("Membership", membershipSchema);
+export const Membership = mongoose.model("Membership", membershipSchema);
 
-export default Membership;
+

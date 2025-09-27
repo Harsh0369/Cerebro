@@ -1,6 +1,6 @@
 import express from 'express';
 import {Group} from '../models/group.model.js';
-import Membership from '../models/membership.model.js';
+import {Membership} from '../models/membership.model.js';
 
 
 // create-->public/private  join-->privte/public  leaveGroup removeUser-->ByAdmin groupChatting 
