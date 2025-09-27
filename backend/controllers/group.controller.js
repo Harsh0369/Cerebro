@@ -146,6 +146,7 @@ export const getAllGroups =async(req,res)=>{
         console.log(error)
     }
 }
+
 export const getGroupById =async(req,res)=>{
     try {
         const groupId =req.params.id;
@@ -160,3 +161,4 @@ export const getGroupById =async(req,res)=>{
         console.log(error)
     }
 }
+
