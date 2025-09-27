@@ -47,7 +47,7 @@ export const login = async (req, res) => {
         if (!isMatch) {
             return res.status(401).json({ message: "Invalid credentials" });
         }
-        const token = user.generateToken();
+      const token = user.generateToken();
         res.status(200).json({ message: "Login successful", user, token });
     }
     catch (err) {
