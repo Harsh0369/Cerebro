@@ -36,10 +36,10 @@ const userSchema = new mongoose.Schema({
         default: []
     },
     availability: [{
-    day: { type: String, required: true },
+        day: { type: String, required: true, default: "Monday" },
     timeSlots: [{
-        start: { type: String, required: true },
-        end: { type: String, required: true }
+        start: { type: String, required: true, default: "09:00" },
+        end: { type: String, required: true, default: "17:00" }
     }]
 }],
 

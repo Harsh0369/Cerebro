@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 
 import { Membership } from "./models/membership.model.js";
 import { Message } from "./models/message.model.js";
+import { User } from "./models/user.model.js";
+import { LLMResponse } from "./services/ai.service.js";
 
 dotenv.config();
 
@@ -83,6 +85,46 @@ io.on("connection", async (socket) => {
       console.error("❌ sendMessage error:", err);
     }
   });
+    
+socket.on("AskAI", async ({ groupId, prompt }) => {
+  if (!groupId || !prompt) return;
+
+  try {
+    // 1️⃣ Fetch or create AI user
+    let aiUser = await User.findOne({ isAI: true });
+    if (!aiUser) {
+      aiUser = await User.create({
+        name: "CerebroAI",
+        username: "CerebroAI",
+        email: process.env.CerebroAI_email,
+        password: process.env.CerebroAI_password,
+        // isAI: true,
+      });
+    }
+
+    // 2️⃣ Get AI response from LLM
+    const response = await LLMResponse(prompt);
+
+    // 3️⃣ Save message in DB
+    const message = await Message.create({
+      group: groupId,
+      sender: aiUser._id,
+      content: response,
+    });
+
+    // 4️⃣ Populate sender for frontend
+    const populatedMsg = await message.populate(
+      "sender",
+      "username name avatar"
+    );
+
+    // 5️⃣ Emit to the group
+    io.to(`group_${groupId}`).emit("receiveMessage", populatedMsg);
+  } catch (err) {
+    console.error("❌ AskAI error:", err);
+  }
+});
+
 
   // 4️⃣ Handle disconnect
   socket.on("disconnect", () => {

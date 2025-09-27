@@ -7,6 +7,24 @@ export const register = async (req, res) => {
     const { name, username, email, password, subjects, availability, avatar } =
       req.body;
 
+    const reservedUsernames = ["AI", "ChatBot", "System","CerebroAI"];
+
+    if (
+      reservedUsernames.some(
+        (name) => name.toLowerCase() === username.toLowerCase()
+      )
+    ) {
+      return res.status(400).json({ message: "This username is reserved" });
+    }
+    const existingUser = await User.findOne({ username });
+
+    if (existingUser) {
+      return res.status(400).json({ message: "Username already taken" });
+    }
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
+      return res.status(400).json({ message: "Email already taken" });
+    }
     // Create user
     const user = await User.create({
       name,

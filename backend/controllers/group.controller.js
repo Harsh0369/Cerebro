@@ -162,3 +162,20 @@ export const getGroupById =async(req,res)=>{
     }
 }
 
+export const searchGroupBySubject = async(req, res) =>{
+    try {
+        const { subject } = req.query;
+        if (!subject) {
+            return res.status(400).json({ message: "Subject is required" });
+        }
+        const groups = await Group.find({ subject: { $regex: subject, $options: "i" } });
+        return res.status(200).json({ message: "Groups found successfully", success: true, data: groups });
+    }
+    catch (err)
+    {
+        res.status(500).json({ message: err.message });
+    }
+}
+
+
+
